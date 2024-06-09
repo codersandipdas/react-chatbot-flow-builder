@@ -2,15 +2,19 @@ import { memo } from 'react';
 import { BiMessageRoundedDetail } from 'react-icons/bi';
 import { Handle, Position } from 'reactflow';
 
-function TextNode({ data }: any) {
+function TextNode({ data, selected }: any) {
   return (
-    <div className='border rounded shadow-lg bg-white border-zinc-100 text-[10px] overflow-hidden w-[200px]'>
+    <div
+      className={`border rounded shadow-lg bg-white ${
+        selected ? 'border-primary' : 'border-zinc-100'
+      } text-[10px] overflow-hidden w-[200px]`}
+    >
       <Handle
         type='target'
         id='l'
         position={Position.Left}
         style={{
-          left: -2,
+          left: -2.5,
         }}
       />
 
@@ -30,7 +34,7 @@ function TextNode({ data }: any) {
         id='b'
         position={Position.Right}
         style={{
-          right: -2,
+          right: -2.5,
         }}
       />
     </div>

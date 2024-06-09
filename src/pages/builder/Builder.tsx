@@ -69,7 +69,7 @@ const Builder = () => {
         id: getId(),
         type,
         position,
-        data: { label: `${type} node`, value: '' },
+        data: { label: `${type} node`, value: '', selected: false },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -77,10 +77,27 @@ const Builder = () => {
     [reactFlowInstance]
   );
 
-  const onNodeClick = useCallback(
-    (event: any, node: any) => setSelectedNode(node),
-    []
-  );
+  // set selected node on clicking a node
+  const onNodeClick = useCallback((event: any, node: any) => {
+    setSelectedNode({ ...node });
+  }, []);
+
+  // Function to handle node value change
+  const onNodeValChange = useCallback((nodeId: string, value: string) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === nodeId ? { ...node, data: { ...node.data, value } } : node
+      )
+    );
+  }, []);
+
+  // deselect node on pressing editor back button
+  const handleDeselectNode = () => {
+    setSelectedNode(null);
+    setNodes((nds) =>
+      nds.map((node) => (node.selected ? { ...node, selected: false } : node))
+    );
+  };
 
   return (
     <ReactFlowProvider>
@@ -112,7 +129,9 @@ const Builder = () => {
           </div>
           <Sidebar
             selectedNode={selectedNode}
-            className='px-4 py-4 w-[400px] max-w-[40%] border-l overflow-x-hidden overflow-y-auto'
+            className='w-[400px] max-w-[40%] border-l overflow-x-hidden overflow-y-auto'
+            onExitNodeEditor={handleDeselectNode}
+            onNodeValChange={onNodeValChange}
           />
         </div>
       </div>
