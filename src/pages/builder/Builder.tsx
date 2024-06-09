@@ -52,7 +52,9 @@ const Builder = () => {
   const onDrop = useCallback(
     (event: any) => {
       event.preventDefault();
-      const type = event.dataTransfer.getData('application/reactflow');
+      const { type, label } = JSON.parse(
+        event.dataTransfer.getData('application/reactflow')
+      );
 
       // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
@@ -70,7 +72,7 @@ const Builder = () => {
         id: getId(),
         type,
         position,
-        data: { label: `${type} node`, value: '', selected: false },
+        data: { label: label, value: '' },
       };
 
       setNodes((nds) => nds.concat(newNode));
