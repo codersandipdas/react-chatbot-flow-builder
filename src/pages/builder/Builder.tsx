@@ -12,6 +12,7 @@ import ReactFlow, {
 import { useCallback, useMemo, useRef, useState } from 'react';
 import Sidebar from '../../components/builder/Sidebar';
 import TextNode from '../../components/builder/nodes/TextNode';
+import toast from 'react-hot-toast';
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -99,13 +100,33 @@ const Builder = () => {
     );
   };
 
+  const validateNodes = () => {
+    if (nodes.length <= 1) {
+      return;
+    }
+
+    // Check if any node has empty target handles (no incoming connections)
+    const nodeIdsWithEmptyTargetHandles: string[] = [];
+    nodes.forEach((node) => {
+      const incomingEdges = edges.filter((edge) => edge.target === node.id);
+      const hasEmptyTargetHandle = incomingEdges.length === 0;
+      if (hasEmptyTargetHandle) {
+        nodeIdsWithEmptyTargetHandles.push(node.id);
+      }
+    });
+
+    if (nodeIdsWithEmptyTargetHandles.length > 1) {
+      toast('Cannot save flow', {
+        style: { backgroundColor: '#FFCBCB' },
+      });
+    }
+  };
+
   return (
     <ReactFlowProvider>
       <div className='h-screen flex overflow-hidden flex-col'>
         <Header
-          onSave={() => {
-            console.log('onsave clcked');
-          }}
+          onSave={validateNodes}
           className='px-4 py-2 shrink-0 border-b'
         />
 

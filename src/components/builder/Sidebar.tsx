@@ -55,6 +55,7 @@ const Sidebar = ({
           <div className='px-4 py-4'>
             {selectedNode.type === 'textNode' && (
               <TextNodeEditor
+                id={selectedNode.id}
                 label='Text'
                 value={selectedNode?.data?.value || ''}
                 onChange={handleOnChnage}

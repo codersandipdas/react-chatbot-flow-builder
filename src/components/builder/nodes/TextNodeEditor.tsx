@@ -3,10 +3,11 @@ import React, { useEffect, useRef, useState } from 'react';
 interface Props {
   label: string;
   value: string;
+  id: string;
   onChange: (value: string) => void;
 }
 
-const TextNodeEditor = ({ label, value, onChange }: Props) => {
+const TextNodeEditor = ({ label, value, id, onChange }: Props) => {
   const [val, setval] = useState<string>(value);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -14,7 +15,7 @@ const TextNodeEditor = ({ label, value, onChange }: Props) => {
   useEffect(() => {
     setval(value);
     inputRef?.current?.focus();
-  }, [value]);
+  }, [id]);
 
   // call function on value change to update node
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -24,13 +25,13 @@ const TextNodeEditor = ({ label, value, onChange }: Props) => {
 
   return (
     <div>
-      <label className='block text-zinc-500' htmlFor='textNode-editor-textarea'>
+      <label className='block text-zinc-500' htmlFor={id}>
         {label}
       </label>
       <textarea
         ref={inputRef}
         className='w-full border rounded mt-3 p-2'
-        id='textNode-editor-textarea'
+        id={id}
         value={val || ''}
         onChange={handleInputChange}
         rows={4}
