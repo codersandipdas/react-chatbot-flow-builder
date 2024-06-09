@@ -1,8 +1,10 @@
 import React from 'react';
 import './App.css';
+import Builder from './pages/builder/Builder';
 
 function App() {
-  return <div className='text-center'>Hello, World</div>;
+  // here we can implement routings and all
+  return <Builder />;
 }
 
 export default App;
