@@ -85,6 +85,17 @@ const Builder = () => {
     setSelectedNode({ ...node });
   }, []);
 
+  // set selected node null on deleting a current editing node
+  const onNodeDelete = useCallback(
+    (nodes: any[]) => {
+      const deletedIndex = nodes?.findIndex((n) => n?.id === selectedNode?.id);
+      if (deletedIndex > -1) {
+        setSelectedNode(null);
+      }
+    },
+    [nodes]
+  );
+
   // Function to handle node value change
   const onNodeValChange = useCallback((nodeId: string, value: string) => {
     setNodes((nds) =>
@@ -104,6 +115,7 @@ const Builder = () => {
 
   const validateNodes = () => {
     if (nodes.length <= 1) {
+      toast.success('Flow saved successfully');
       return;
     }
 
@@ -121,7 +133,11 @@ const Builder = () => {
       toast('Cannot save flow', {
         style: { backgroundColor: '#FFCBCB' },
       });
+
+      return;
     }
+
+    toast.success('Flow saved successfully');
   };
 
   return (
@@ -146,6 +162,7 @@ const Builder = () => {
               onDragOver={onDragOver}
               fitView
               onNodeClick={onNodeClick}
+              onNodesDelete={onNodeDelete}
             >
               <Controls />
             </ReactFlow>
